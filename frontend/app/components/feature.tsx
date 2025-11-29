@@ -11,6 +11,7 @@ if (typeof window !== 'undefined') {
 
 export function Features() {
     const cardsRef = useRef<HTMLDivElement>(null);
+    const headerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (!cardsRef.current) return;
@@ -21,6 +22,22 @@ export function Features() {
         gsap.set(cards, { opacity: 1, y: 0 });
 
         const ctx = gsap.context(() => {
+            // Header animation
+            if (headerRef.current) {
+                gsap.from(headerRef.current.querySelectorAll('.animate-item'), {
+                    y: 40,
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.15,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: headerRef.current,
+                        start: 'top 85%',
+                        toggleActions: 'play none none none',
+                    },
+                });
+            }
+
             gsap.fromTo(cards,
                 {
                     y: 60,
@@ -95,24 +112,70 @@ export function Features() {
     ];
 
     return (
-        <section className="py-32 px-8 bg-white">
+        <section className="pt-16 pb-32 px-8 bg-white">
+            {/* Import Google Fonts (matching hero) */}
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+            <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
             <div className="max-w-7xl mx-auto">
                 {/* Section header */}
-                <div className="text-center mb-20">
-                    <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-black/5 rounded-full transition-all duration-300 hover:scale-105"
+                <div ref={headerRef} className="text-center mb-20">
+                    <div
+                        className="animate-item inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105"
                         style={{
                             background: 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%)',
                             backdropFilter: 'blur(10px)',
                             border: '1px solid rgba(255,255,255,0.3)',
                             boxShadow: '0 4px 16px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.5)',
-                        }}>
-                        <div className="inset-0 w-2 h-2 bg-sky-300 rounded-full animate-pulse" />
-                        <span className="text-xs tracking-widest text-black/60">POWERFUL FEATURES</span>
+                        }}
+                    >
+                        <div className="relative">
+                            <div className="w-2 h-2 bg-sky-400 rounded-full animate-ping" />
+                            <div className="absolute inset-0 w-2 h-2 bg-sky-300 rounded-full animate-pulse" />
+                        </div>
+                        <span
+                            className="text-xs tracking-widest text-black/60 font-medium"
+                            style={{ fontFamily: "'Outfit', sans-serif" }}
+                        >
+                            POWERFUL FEATURES
+                        </span>
                     </div>
-                    <h2 className="text-5xl md:text-6xl text-black mb-6">
+                    <h2
+                        className="animate-item text-5xl md:text-6xl text-black mb-6 font-medium"
+                        style={{
+                            fontFamily: "'Space Grotesk', sans-serif",
+                            letterSpacing: '-0.02em',
+                            textShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                        }}
+                    >
                         Built for the future
                     </h2>
-                    <p className="text-xl text-black/40 max-w-2xl mx-auto">
+
+                    {/* Decorative divider (matching hero) */}
+                    <div className="animate-item flex items-center justify-center gap-4 mb-6">
+                        <div
+                            className="h-px w-16"
+                            style={{
+                                background: 'linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.6), rgba(168, 85, 247, 0.4))',
+                            }}
+                        />
+                        <div className="relative">
+                            <div className="w-2 h-2 bg-sky-400 rounded-full" />
+                            <div className="absolute inset-0 w-2 h-2 bg-sky-300 rounded-full animate-pulse opacity-50" />
+                        </div>
+                        <div
+                            className="h-px w-16"
+                            style={{
+                                background: 'linear-gradient(90deg, rgba(168, 85, 247, 0.4), rgba(56, 189, 248, 0.6), transparent)',
+                            }}
+                        />
+                    </div>
+
+                    <p
+                        className="animate-item text-lg md:text-xl text-black/40 max-w-2xl mx-auto font-light tracking-tight"
+                        style={{ fontFamily: "'Outfit', sans-serif" }}
+                    >
                         Combining cutting-edge AI with intuitive design to revolutionize how you manage tasks
                     </p>
                 </div>
@@ -187,10 +250,16 @@ export function Features() {
                                 </div>
 
                                 {/* Content */}
-                                <h3 className="relative z-10 text-lg font-semibold text-black mb-3">
+                                <h3
+                                    className="relative z-10 text-lg font-semibold text-black mb-3"
+                                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                                >
                                     {feature.title}
                                 </h3>
-                                <p className="relative z-10 text-black/60 leading-relaxed">
+                                <p
+                                    className="relative z-10 text-black/60 leading-relaxed font-light"
+                                    style={{ fontFamily: "'Outfit', sans-serif" }}
+                                >
                                     {feature.description}
                                 </p>
 

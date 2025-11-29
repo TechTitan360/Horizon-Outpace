@@ -131,7 +131,7 @@ export function Hero() {
     }, []);
 
     return (
-        <section className="h-screen flex items-center justify-center px-6 py-4 overflow-hidden">
+        <section className="min-h-screen flex items-center justify-center px-6 pt-4 pb-8 overflow-hidden">
             {/* Import Google Fonts */}
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -418,7 +418,7 @@ export function Hero() {
                 </div>
 
                 {/* Scroll indicator */}
-                <div className="flex justify-center mt-4 shrink-0">
+                <div className="flex justify-center mt-10 shrink-0">
                     <div className="flex flex-col items-center gap-1 animate-bounce">
                         <span
                             className="text-xs text-black/40 tracking-widest"
