@@ -22,7 +22,8 @@ export default function TasksPage() {
                 return;
             }
 
-            const response = await fetch('http://localhost:8000/api/tasks', {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+            const response = await fetch(`${apiUrl}/api/tasks`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
