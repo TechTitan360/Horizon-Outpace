@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Build outputs
+dist/
+build/
+
+# Debug logs
+*.log
+
+# Bun
+bun.lockb
+bun.lock
+
+# Database migrations (optional - keep if you want to track migrations)
+# drizzle/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

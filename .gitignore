@@ -47,6 +47,16 @@ Thumbs.db
 
 # Bun
 bun.lockb
+bun.lock
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+drizzle/
 
 # Images (optional - remove if you want to track images)
 banner.png
+
+# Backup files
+*.backup

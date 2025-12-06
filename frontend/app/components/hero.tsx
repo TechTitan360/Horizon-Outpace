@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { gsap } from 'gsap';
-import { Logo } from './logo';
+import Link from 'next/link';
 
 export function Hero() {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -37,39 +37,35 @@ export function Hero() {
     }, []);
 
     useEffect(() => {
+        // Set initial states explicitly
+        gsap.set([titleRef.current, taglineRef.current], { opacity: 1, y: 0 });
+        gsap.set(dividerRef.current, { opacity: 1, scale: 1 });
+
         // Initial animations
         const tl = gsap.timeline();
 
-        tl.from(titleRef.current, {
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            ease: 'power3.out',
-        })
-            .from(taglineRef.current, {
-                y: 30,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.out',
-            }, '-=0.5')
-            .from(dividerRef.current, {
-                scale: 0,
-                opacity: 0,
-                duration: 0.6,
-                ease: 'back.out(1.7)',
-            }, '-=0.4');
+        tl.fromTo(titleRef.current,
+            { y: 50, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
+        )
+            .fromTo(taglineRef.current,
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
+                '-=0.5'
+            )
+            .fromTo(dividerRef.current,
+                { scale: 0, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)' },
+                '-=0.4'
+            );
 
         // Animate SVG circles
         if (svgRef.current) {
             const circles = svgRef.current.querySelectorAll('circle');
-            gsap.from(circles, {
-                scale: 0,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.1,
-                ease: 'elastic.out(1, 0.5)',
-                transformOrigin: 'center center',
-            });
+            gsap.fromTo(circles,
+                { scale: 0, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'elastic.out(1, 0.5)', transformOrigin: 'center center' }
+            );
 
             gsap.to(circles, {
                 y: '+=10',
@@ -128,6 +124,24 @@ export function Hero() {
                 ease: 'sine.inOut',
             });
         }
+
+        // Cleanup on unmount
+        return () => {
+            gsap.killTweensOf([
+                titleRef.current,
+                taglineRef.current,
+                dividerRef.current,
+                glassShineRef.current,
+                secondaryShineRef.current,
+                liquidBlobRef.current
+            ]);
+            if (svgRef.current) {
+                gsap.killTweensOf(svgRef.current.querySelectorAll('circle'));
+            }
+            if (orbsRef.current) {
+                gsap.killTweensOf(orbsRef.current.querySelectorAll('.orb'));
+            }
+        };
     }, []);
 
     return (
@@ -135,7 +149,7 @@ export function Hero() {
             {/* Import Google Fonts */}
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-            <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+            <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
             <div className="w-full max-w-7xl h-full flex flex-col justify-center">
                 {/* <div className="absolute top-8 left-8 z-20">
@@ -375,6 +389,36 @@ export function Hero() {
                         >
                             Transform Tasks into Momentum
                         </p>
+
+                        {/* CTA Button - Minimal glassmorphic style */}
+                        <div className="mt-12 flex items-center gap-4">
+                            <Link
+                                href="/auth"
+                                className="group flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-300 hover:scale-[1.02]"
+                                style={{
+                                    background: 'linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 100%)',
+                                    backdropFilter: 'blur(12px)',
+                                    border: '1px solid rgba(255,255,255,0.4)',
+                                    boxShadow: '0 4px 20px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.6)',
+                                }}
+                            >
+                                <span
+                                    className="text-sm text-black/70 font-medium tracking-wider group-hover:text-black transition-colors duration-300"
+                                    style={{ fontFamily: "'Geist Mono', monospace" }}
+                                >
+                                    Get Started
+                                </span>
+                                <div
+                                    className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-0.5"
+                                    style={{
+                                        background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(168, 85, 247, 0.2))',
+                                        border: '1px solid rgba(255,255,255,0.3)',
+                                    }}
+                                >
+                                    <ArrowRight className="w-3 h-3 text-black/60" />
+                                </div>
+                            </Link>
+                        </div>
                     </div>
 
                     {/* Bottom gradient line */}
