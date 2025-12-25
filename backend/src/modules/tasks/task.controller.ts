@@ -44,8 +44,8 @@ export const getTasks = async (req: RequestWithUser): Promise<Response> => {
         // Map status and priority numbers to strings for frontend
         const mappedTasks = tasks.map(task => ({
             ...task,
-            statusName: Object.keys(TASK_STATUS)[task.status] || 'unknown',
-            priorityName: Object.keys(TASK_PRIORITY)[task.priority] || 'unknown',
+            statusName: Object.keys(TASK_STATUS)[task.status]?.toLowerCase() || 'unknown',
+            priorityName: Object.keys(TASK_PRIORITY)[task.priority]?.toLowerCase() || 'unknown',
         }));
 
         return Response.json({
