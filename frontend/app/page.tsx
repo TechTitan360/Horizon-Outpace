@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import { Hero } from './components/hero';
 import { Features } from './components/feature';
 import { Visualization } from './components/visualization';
@@ -8,6 +10,15 @@ import { Visualization } from './components/visualization';
 // import { CustomCursor } from './components/CustomCursor';
 
 export default function App() {
+  // Enable smooth scroll only for landing page
+  useEffect(() => {
+    document.documentElement.style.scrollBehavior = 'smooth';
+
+    return () => {
+      document.documentElement.style.scrollBehavior = 'auto';
+    };
+  }, []);
+
   return (
     <div className="bg-white">
       {/* <CustomCursor /> */}

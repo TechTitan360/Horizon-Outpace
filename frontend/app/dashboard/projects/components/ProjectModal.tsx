@@ -3,65 +3,38 @@
 import React, { useState, useEffect } from 'react';
 import { X, Loader2 } from 'lucide-react';
 
-interface Task {
+interface Project {
     id?: number;
     title: string;
     description?: string | null;
-    status: number;
-    priority: number;
-    dueDate?: string | null;
 }
 
-interface TaskModalProps {
+interface ProjectModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSuccess: () => void;
-    task?: Task | null; // If provided, we're editing; otherwise creating
+    project?: Project | null;
 }
 
-const STATUS_OPTIONS = [
-    { value: 0, label: 'To Do' },
-    { value: 1, label: 'In Progress' },
-    { value: 2, label: 'Completed' },
-];
-
-const PRIORITY_OPTIONS = [
-    { value: 0, label: 'Low' },
-    { value: 1, label: 'Normal' },
-    { value: 2, label: 'High' },
-    { value: 3, label: 'Critical' },
-];
-
-export default function TaskModal({ isOpen, onClose, onSuccess, task }: TaskModalProps) {
+export default function ProjectModal({ isOpen, onClose, onSuccess, project }: ProjectModalProps) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [status, setStatus] = useState(0);
-    const [priority, setPriority] = useState(1);
-    const [dueDate, setDueDate] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const isEditing = !!task?.id;
+    const isEditing = !!project?.id;
 
-    // Reset form when modal opens/closes or task changes
     useEffect(() => {
-        if (isOpen && task) {
-            setTitle(task.title || '');
-            setDescription(task.description || '');
-            setStatus(task.status ?? 0);
-            setPriority(task.priority ?? 1);
-            setDueDate(task.dueDate ? task.dueDate.split('T')[0] : '');
+        if (isOpen && project) {
+            setTitle(project.title || '');
+            setDescription(project.description || '');
             setError('');
         } else if (isOpen) {
-            // Reset for new task
             setTitle('');
             setDescription('');
-            setStatus(0);
-            setPriority(1);
-            setDueDate('');
             setError('');
         }
-    }, [isOpen, task]);
+    }, [isOpen, project]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -84,15 +57,12 @@ export default function TaskModal({ isOpen, onClose, onSuccess, task }: TaskModa
 
             const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
             const url = isEditing
-                ? `${apiUrl}/api/tasks/${task.id}`
-                : `${apiUrl}/api/tasks`;
+                ? `${apiUrl}/api/projects/${project.id}`
+                : `${apiUrl}/api/projects`;
 
             const payload = {
                 title: title.trim(),
                 description: description.trim() || undefined,
-                status,
-                priority,
-                dueDate: dueDate || undefined,
             };
 
             const response = await fetch(url, {
@@ -110,7 +80,7 @@ export default function TaskModal({ isOpen, onClose, onSuccess, task }: TaskModa
                 onSuccess();
                 onClose();
             } else {
-                setError(data.error || data.message || 'Failed to save task');
+                setError(data.error || data.message || 'Failed to save project');
             }
         } catch (err: any) {
             setError(err.message || 'Something went wrong');
@@ -135,7 +105,7 @@ export default function TaskModal({ isOpen, onClose, onSuccess, task }: TaskModa
                     {/* Header */}
                     <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
                         <h2 className="text-xl font-semibold text-foreground">
-                            {isEditing ? 'Edit Task' : 'Create New Task'}
+                            {isEditing ? 'Edit Project' : 'Create New Project'}
                         </h2>
                         <button
                             onClick={onClose}
@@ -164,9 +134,10 @@ export default function TaskModal({ isOpen, onClose, onSuccess, task }: TaskModa
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                placeholder="Enter task title"
+                                placeholder="Enter project title"
                                 className="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
                                 maxLength={200}
+                                autoFocus
                             />
                         </div>
 
@@ -179,65 +150,10 @@ export default function TaskModal({ isOpen, onClose, onSuccess, task }: TaskModa
                                 id="description"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Enter task description (optional)"
-                                rows={3}
+                                placeholder="Enter project description (optional)"
+                                rows={4}
                                 className="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors resize-none"
                                 maxLength={1000}
-                            />
-                        </div>
-
-                        {/* Status & Priority Row */}
-                        <div className="grid grid-cols-2 gap-4">
-                            {/* Status */}
-                            <div>
-                                <label htmlFor="status" className="block text-sm font-medium text-foreground mb-1.5">
-                                    Status
-                                </label>
-                                <select
-                                    id="status"
-                                    value={status}
-                                    onChange={(e) => setStatus(Number(e.target.value))}
-                                    className="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors bg-[var(--card-bg)]"
-                                >
-                                    {STATUS_OPTIONS.map((option) => (
-                                        <option key={option.value} value={option.value}>
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            {/* Priority */}
-                            <div>
-                                <label htmlFor="priority" className="block text-sm font-medium text-foreground mb-1.5">
-                                    Priority
-                                </label>
-                                <select
-                                    id="priority"
-                                    value={priority}
-                                    onChange={(e) => setPriority(Number(e.target.value))}
-                                    className="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors bg-[var(--card-bg)]"
-                                >
-                                    {PRIORITY_OPTIONS.map((option) => (
-                                        <option key={option.value} value={option.value}>
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-
-                        {/* Due Date */}
-                        <div>
-                            <label htmlFor="dueDate" className="block text-sm font-medium text-foreground mb-1.5">
-                                Due Date
-                            </label>
-                            <input
-                                id="dueDate"
-                                type="date"
-                                value={dueDate}
-                                onChange={(e) => setDueDate(e.target.value)}
-                                className="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
                             />
                         </div>
 
@@ -257,7 +173,7 @@ export default function TaskModal({ isOpen, onClose, onSuccess, task }: TaskModa
                                 className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-brand-600 rounded-lg hover:bg-brand-700 transition-colors disabled:opacity-50"
                             >
                                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                                {isEditing ? 'Update Task' : 'Create Task'}
+                                {isEditing ? 'Update Project' : 'Create Project'}
                             </button>
                         </div>
                     </form>

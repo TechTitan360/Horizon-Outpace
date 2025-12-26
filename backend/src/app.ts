@@ -1,5 +1,6 @@
 import { register, login } from './modules/auth/auth.controller';
-import { getTasks, createTask, updateTask, deleteTask, getTaskStats } from './modules/tasks/task.controller';
+import { handleTaskRoutes } from './modules/tasks/task.routes';
+import { handleProjectRoutes } from './modules/projects/project.routes';
 
 export function createApp() {
     return async function handleRequest(req: Request): Promise<Response> {
@@ -38,71 +39,12 @@ export function createApp() {
         }
 
         // Task routes
-        if (pathname === '/api/tasks' && method === 'GET') {
-            try {
-                return await getTasks(req as any);
-            } catch (error: any) {
-                console.error('Get tasks error:', error);
-                return Response.json(
-                    { success: false, error: error.message || 'Internal server error' },
-                    { status: 500 }
-                );
-            }
-        }
+        const taskResponse = await handleTaskRoutes(pathname, method, req);
+        if (taskResponse) return taskResponse;
 
-        if (pathname === '/api/tasks' && method === 'POST') {
-            try {
-                return await createTask(req as any);
-            } catch (error: any) {
-                console.error('Create task error:', error);
-                return Response.json(
-                    { success: false, error: error.message || 'Internal server error' },
-                    { status: 500 }
-                );
-            }
-        }
-
-        if (pathname === '/api/tasks/stats' && method === 'GET') {
-            try {
-                return await getTaskStats(req as any);
-            } catch (error: any) {
-                console.error('Get task stats error:', error);
-                return Response.json(
-                    { success: false, error: error.message || 'Internal server error' },
-                    { status: 500 }
-                );
-            }
-        }
-
-        // Task by ID routes (PUT /api/tasks/:id, DELETE /api/tasks/:id)
-        const taskIdMatch = pathname.match(/^\/api\/tasks\/(\d+)$/);
-        if (taskIdMatch) {
-            const taskId = parseInt(taskIdMatch[1]);
-
-            if (method === 'PUT') {
-                try {
-                    return await updateTask(req as any, taskId);
-                } catch (error: any) {
-                    console.error('Update task error:', error);
-                    return Response.json(
-                        { success: false, error: error.message || 'Internal server error' },
-                        { status: 500 }
-                    );
-                }
-            }
-
-            if (method === 'DELETE') {
-                try {
-                    return await deleteTask(req as any, taskId);
-                } catch (error: any) {
-                    console.error('Delete task error:', error);
-                    return Response.json(
-                        { success: false, error: error.message || 'Internal server error' },
-                        { status: 500 }
-                    );
-                }
-            }
-        }
+        // Project routes
+        const projectResponse = await handleProjectRoutes(pathname, method, req);
+        if (projectResponse) return projectResponse;
 
         // 404 Not Found
         return Response.json(

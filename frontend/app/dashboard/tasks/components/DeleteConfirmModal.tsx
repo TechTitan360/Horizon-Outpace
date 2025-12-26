@@ -30,18 +30,18 @@ export default function DeleteConfirmModal({
 
             {/* Modal */}
             <div className="flex min-h-full items-center justify-center p-4">
-                <div className="relative w-full max-w-md bg-white rounded-xl shadow-xl">
+                <div className="relative w-full max-w-md bg-[var(--card-bg)] rounded-xl shadow-xl">
                     {/* Header */}
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
                         <div className="flex items-center gap-3">
-                            <div className="p-2 bg-red-100 rounded-lg">
-                                <AlertTriangle className="w-5 h-5 text-red-600" />
+                            <div className="p-2 bg-error-light rounded-lg">
+                                <AlertTriangle className="w-5 h-5 text-error" />
                             </div>
-                            <h2 className="text-xl font-semibold text-gray-900">Delete Task</h2>
+                            <h2 className="text-xl font-semibold text-foreground">Delete Task</h2>
                         </div>
                         <button
                             onClick={onClose}
-                            className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="p-2 text-foreground-muted hover:text-foreground rounded-lg hover:bg-surface-secondary transition-colors"
                         >
                             <X className="w-5 h-5" />
                         </button>
@@ -49,22 +49,22 @@ export default function DeleteConfirmModal({
 
                     {/* Content */}
                     <div className="p-6">
-                        <p className="text-gray-600">
+                        <p className="text-foreground-muted">
                             Are you sure you want to delete{' '}
-                            <span className="font-semibold text-gray-900">"{taskTitle}"</span>?
+                            <span className="font-semibold text-foreground">"{taskTitle}"</span>?
                         </p>
-                        <p className="mt-2 text-sm text-gray-500">
+                        <p className="mt-2 text-sm text-foreground-muted/70">
                             This action cannot be undone.
                         </p>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200">
+                    <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--border)]">
                         <button
                             type="button"
                             onClick={onClose}
                             disabled={loading}
-                            className="px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+                            className="px-4 py-2.5 text-sm font-medium text-foreground bg-surface-secondary rounded-lg hover:bg-border transition-colors disabled:opacity-50"
                         >
                             Cancel
                         </button>
@@ -72,7 +72,7 @@ export default function DeleteConfirmModal({
                             type="button"
                             onClick={onConfirm}
                             disabled={loading}
-                            className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                            className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-error rounded-lg hover:bg-error/90 transition-colors disabled:opacity-50"
                         >
                             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                             Delete Task

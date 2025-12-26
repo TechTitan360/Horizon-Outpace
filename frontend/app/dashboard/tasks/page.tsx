@@ -199,13 +199,13 @@ export default function TasksPage() {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-foreground-muted text-sm">
                         {statusCounts.all} tasks · {statusCounts.completed} completed
                     </p>
                 </div>
                 <button
                     onClick={handleNewTask}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors"
                 >
                     <Plus className="w-4 h-4" />
                     New Task
@@ -215,18 +215,18 @@ export default function TasksPage() {
             {/* Filters Bar */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 {/* Status Tabs */}
-                <div className="flex items-center bg-gray-100 rounded-lg p-1 overflow-x-auto">
+                <div className="flex items-center bg-surface-secondary rounded-lg p-1 overflow-x-auto">
                     {tabs.map((tab) => (
                         <button
                             key={tab.key}
                             onClick={() => setFilterStatus(tab.key)}
                             className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${filterStatus === tab.key
-                                ? 'bg-white text-gray-900 shadow-sm'
-                                : 'text-gray-600 hover:text-gray-900'
+                                ? 'bg-[var(--card-bg)] text-foreground shadow-sm'
+                                : 'text-foreground-muted hover:text-foreground'
                                 }`}
                         >
                             {tab.label}
-                            <span className={`ml-1.5 text-xs ${filterStatus === tab.key ? 'text-gray-500' : 'text-gray-400'}`}>
+                            <span className={`ml-1.5 text-xs ${filterStatus === tab.key ? 'text-foreground-muted' : 'text-foreground-muted/60'}`}>
                                 {statusCounts[tab.key]}
                             </span>
                         </button>
@@ -235,22 +235,22 @@ export default function TasksPage() {
 
                 {/* Search */}
                 <div className="relative w-full sm:w-64 flex-shrink-0">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-muted" />
                     <input
                         type="text"
                         placeholder="Search tasks..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        className="w-full pl-9 pr-4 py-2 text-sm bg-[var(--card-bg)] border border-[var(--border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
                     />
                 </div>
             </div>
 
             {/* Error Banner */}
             {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-red-700 text-sm flex items-center justify-between">
+                <div className="bg-error-light border border-error/20 rounded-lg px-4 py-3 text-error text-sm flex items-center justify-between">
                     <span>{error}</span>
-                    <button onClick={clearError} className="text-red-500 hover:text-red-700 p-1">
+                    <button onClick={clearError} className="text-error/70 hover:text-error p-1">
                         ✕
                     </button>
                 </div>
@@ -264,17 +264,17 @@ export default function TasksPage() {
                     <TaskSkeleton />
                 </div>
             ) : filteredTasks.length === 0 ? (
-                <div className="bg-white rounded-xl border border-gray-200/80 p-12 text-center">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-4">
-                        <CheckSquare className="w-6 h-6 text-gray-400" />
+                <div className="bg-[var(--card-bg)] rounded-xl border border-[var(--card-border)] p-12 text-center">
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-surface-secondary rounded-full mb-4">
+                        <CheckSquare className="w-6 h-6 text-foreground-muted" />
                     </div>
                     {tasks.length === 0 ? (
                         <>
-                            <h3 className="text-base font-semibold text-gray-900 mb-1">No tasks yet</h3>
-                            <p className="text-gray-500 text-sm mb-6">Get started by creating your first task</p>
+                            <h3 className="text-base font-semibold text-foreground mb-1">No tasks yet</h3>
+                            <p className="text-foreground-muted text-sm mb-6">Get started by creating your first task</p>
                             <button
                                 onClick={handleNewTask}
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors"
                             >
                                 <Plus className="w-4 h-4" />
                                 Create Task
@@ -282,8 +282,8 @@ export default function TasksPage() {
                         </>
                     ) : (
                         <>
-                            <h3 className="text-base font-semibold text-gray-900 mb-1">No matching tasks</h3>
-                            <p className="text-gray-500 text-sm">Try adjusting your search or filter</p>
+                            <h3 className="text-base font-semibold text-foreground mb-1">No matching tasks</h3>
+                            <p className="text-foreground-muted text-sm">Try adjusting your search or filter</p>
                         </>
                     )}
                 </div>
