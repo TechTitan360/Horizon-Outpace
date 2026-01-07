@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Loader2 } from 'lucide-react';
 
 interface Project {
@@ -91,7 +92,8 @@ export default function ProjectModal({ isOpen, onClose, onSuccess, project }: Pr
 
     if (!isOpen) return null;
 
-    return (
+    // Use portal to render modal at document body level, escaping any parent stacking contexts
+    return createPortal(
         <div className="fixed inset-0 z-50 overflow-y-auto">
             {/* Backdrop */}
             <div
@@ -179,6 +181,7 @@ export default function ProjectModal({ isOpen, onClose, onSuccess, project }: Pr
                     </form>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

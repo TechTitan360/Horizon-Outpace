@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 
 interface DeleteConfirmModalProps {
@@ -14,7 +15,8 @@ interface DeleteConfirmModalProps {
 export default function DeleteConfirmModal({ isOpen, onClose, onConfirm, loading, title }: DeleteConfirmModalProps) {
     if (!isOpen) return null;
 
-    return (
+    // Use portal to render modal at document body level, escaping any parent stacking contexts
+    return createPortal(
         <div className="fixed inset-0 z-50 overflow-y-auto">
             {/* Backdrop */}
             <div
@@ -58,6 +60,7 @@ export default function DeleteConfirmModal({ isOpen, onClose, onConfirm, loading
                     </div>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
